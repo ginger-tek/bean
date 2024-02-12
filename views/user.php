@@ -17,9 +17,7 @@
       <div class="post parent" onclick="location.href='/posts/<?= $parent->id ?>'">
         <div class="header">
           <div class="author">
-            <?= $parent->authorDisplayName ?> (<a href="/@<?= $parent->authorUsername ?>">@
-              <?= $parent->authorUsername ?>
-            </a>)
+            <?= $parent->authorDisplayName ?> (<a href="/@<?= $parent->authorUsername ?>">@<?= $parent->authorUsername ?></a>)
           </div>
           <div class="created" title="<?= date('Y-m-d g:i:s A', $parent->created) ?>">
             <?= date('j M y', $parent->created) ?>
@@ -33,9 +31,7 @@
     <?php } ?>
     <div class="header">
       <div class="author">
-        <?= $post->authorDisplayName ?> (<a href="/@<?= $post->authorUsername ?>">@
-          <?= $post->authorUsername ?>
-        </a>)
+        <?= $post->authorDisplayName ?> (<a href="/@<?= $post->authorUsername ?>">@<?= $post->authorUsername ?></a>)
       </div>
       <div class="created" title="<?= date('Y-m-d g:i:s A', $post->created) ?>">
         <?= date('j M y', $post->created) ?>
