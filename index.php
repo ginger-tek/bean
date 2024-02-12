@@ -41,10 +41,8 @@ $app->route('GET|POST', '/login', function (Routy $app) {
   if ($app->method == 'POST') {
     $body = $app->getBody();
     $svc = new Users(new DB());
-    if (!($user = $svc->find($body->username)))
-      $err = 'User not found';
-    else if (!password_verify($body->password, $user->password))
-      $err = 'Incorrect password';
+    if (!($user = $svc->find($body->username)) || !password_verify($body->password, $user->password))
+      $err = 'Incorrect username or password';
     else {
       session_start();
       $_SESSION['user'] = $user;
