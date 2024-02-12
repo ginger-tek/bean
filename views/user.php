@@ -2,9 +2,7 @@
   <?= $user->displayName ?>
 </h2>
 <div>
-  <a href="/@<?= $user->username ?>">@
-    <?= $user->username ?>
-  </a>
+  <a href="/@<?= $user->username ?>">@<?= $user->username ?></a>
 </div>
 <pre class="bio"><?= $user->bio ? \Services\Utils::parse(htmlspecialchars($user->bio)) : '<i>Hi! I\'m new here!</i>' ?></pre>
 <p class="joined">Joined

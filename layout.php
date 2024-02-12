@@ -18,15 +18,13 @@
         <dialog id="newPost">
           <header>New Post</header>
           <section>
-            <form method="POST" action="/post">
+            <form method="POST" action="/posts">
               <label><span id="counter">0</span>/140
-                <textarea name="body" placeholder="New post..." oninput="counter.innerText = this.value.length"
-                  maxlength="140" rows="5" required></textarea>
+                <textarea name="body" placeholder="New post..." oninput="counter.innerText = this.value.length" maxlength="140" rows="5" required></textarea>
               </label>
               <div class="grid">
                 <button type="reset" onclick="newPost.close()">Cancel</button>
-                <button type="submit"
-                  onclick="if(counter.innerText*1 > 0) {this.setAttribute('aria-busy','true');newPost.close()}">Submit</button>
+                <button type="submit" onclick="if(counter.innerText*1 > 0) {this.setAttribute('aria-busy','true');newPost.close()}">Submit</button>
               </div>
             </form>
           </section>
