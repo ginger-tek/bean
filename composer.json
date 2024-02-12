@@ -1,0 +1,5 @@
+{
+    "require": {
+        "ginger-tek/routy": "^3.2"
+    }
+}
