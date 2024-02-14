@@ -42,3 +42,9 @@ if (count($posts) == 0) { ?>
     <?php } ?>
   </div>
 <?php } ?>
+<script>
+  setInterval(() => {
+    if (document.visibilityState == 'visible' && !newPost.hasAttribute('open') && !account.hasAttribute('open'))
+      location.reload()
+  }, 10000)
+</script>
