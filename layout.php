@@ -36,7 +36,7 @@
           <section>
             <div class="grid">
               <a role="button" href="/@<?= $_SESSION['user']->username ?>">My Profile</a>
-              <a role="button" href="?logout=1">Logout</a>
+              <a role="button" href="/logout">Logout</a>
             </div>
             <hr>
             <form method="POST" action="/profile">
