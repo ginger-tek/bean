@@ -106,7 +106,7 @@ try {
     session_start();
     $_SESSION['user']->displayName = substr($_POST['displayName'], 0, 25);
     $_SESSION['user']->bio = substr($_POST['bio'], 0, 140);
-    $app->sendRedirect($_SERVER['REQUEST_URI']);
+    $app->sendRedirect($_GET['next'] ?: '/');
   });
 
   $app->notFound(function (Routy $app) {

@@ -39,7 +39,7 @@
               <a role="button" href="/logout">Logout</a>
             </div>
             <hr>
-            <form method="POST" action="/profile">
+            <form method="POST" action="/profile?next=<?= $_SERVER['REQUEST_URI'] ?>">
               <input name="save" value="1" hidden required>
               <label>Display Name
                 <input name="displayName" value="<?= $_SESSION['user']->displayName ?>" maxlength="25" required>
