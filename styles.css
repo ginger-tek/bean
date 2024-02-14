@@ -109,9 +109,11 @@ label:has(input, select, textarea) {
   font-size: 1em;
   background: var(--primary);
   border-color: var(--primary);
+  text-decoration: none;
   border-radius: 5px;
   cursor: pointer;
-  color: inherit;
+  color: var(--bg) !important;
+  font-weight: bold;
   padding: 5px;
   text-align: center;
 }
