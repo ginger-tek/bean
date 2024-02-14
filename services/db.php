@@ -12,7 +12,7 @@ class DB
       \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
       \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ
     ]);
-    $this->conn->exec(file_get_contents('data/schema.sql'));
+    $this->conn->exec(file_get_contents('schema.sql'));
   }
 
   function run($sql, $params = [])
