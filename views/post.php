@@ -34,7 +34,7 @@
   <dialog id="reply">
     <header>New Reply</header>
     <section>
-      <form method="POST">
+      <form method="POST" action="/posts">
         <input name="parent" value="<?= $post->id ?>" hidden>
         <label><span id="counter">0</span>/140
           <textarea name="body" placeholder="Reply..." oninput="counter.innerText = this.value.length" maxlength="140"
