@@ -5,7 +5,7 @@
   <title>Bean</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="icon" href="https://cdn.modrinth.com/data/EOfoQZPE/icon.jpg">
+  <link rel="icon" href="favicon.ico">
 </head>
 
 <body>
