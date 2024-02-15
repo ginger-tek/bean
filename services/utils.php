@@ -14,7 +14,7 @@ class Utils
 
   static function parse($body)
   {
-    if (preg_match_all('#([-a-zA-Z0-9@:%._\+~\#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~\#?&//=]*))#m', $body, $links, PREG_PATTERN_ORDER)) {
+    if (preg_match_all('#((https://){0,1}[-a-zA-Z0-9@:%._\+~\#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~\#?&//=]*))#m', $body, $links, PREG_PATTERN_ORDER)) {
       foreach ($links[0] as $link) {
         if (preg_match('#(youtube\.com/watch\?v=|youtu\.be)(\w+)#', $link, $vid)) {
           $body = str_replace($link, '<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/' . $vid[2] . '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>', $body);
