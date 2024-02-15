@@ -22,7 +22,7 @@ if (count($posts) == 0) { ?>
 
 <script>
   setInterval(() => {
-    if (document.visibilityState == 'visible' && !newPost.hasAttribute('open') && !account.hasAttribute('open'))
+    if (document.visibilityState == 'visible' && (newPost && !newPost.hasAttribute('open')) && (account && !account.hasAttribute('open')))
       location.reload()
   }, 30000)
 </script>
