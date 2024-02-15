@@ -5,14 +5,14 @@
   <title>Bean</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="icon" href="favicon.ico">
+  <link rel="icon" href="/favicon.ico">
 </head>
 
 <body>
   <header>
     <nav>
       <a href="/" class="brand">
-        <img src="https://cdn.modrinth.com/data/EOfoQZPE/icon.jpg"><b>Bean</b>
+        <img src="/favicon.ico"><b>Bean</b>
       </a>
       <?php if (isset($_SESSION['user'])) { ?>
         <dialog id="newPost">
