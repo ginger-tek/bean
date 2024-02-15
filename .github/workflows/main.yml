@@ -10,9 +10,6 @@ jobs:
     steps:
     - shell: pwsh
       env:
-        API_KEY: ${{ secrets.awsmbx_api_key }}
+        API_KEY: ${{ secrets.AWSMBX_API_KEY }}
       run: |
-        irm -Uri https://awsmbx.net/ghd `
-          -Method POST `
-          -Headers @{Authorization=$env:API_KEY} `
-          -Body @{site='bean';packageLink='https://github.com/ginger-tek/bean/archive/refs/heads/main.zip';clean=@{exclude='bean.db'}}
+        irm -Uri https://awsmbx.net/ghd -Method POST -Headers @{Authorization=$env:API_KEY} -Body @{site='bean';packageLink='https://github.com/ginger-tek/bean/archive/refs/heads/main.zip';clean=@{exclude='bean.db'}}
