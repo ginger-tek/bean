@@ -19,8 +19,8 @@
           <header>New Post</header>
           <section>
             <form method="POST" action="/posts">
-              <label><span id="counter">0</span>/140
-                <textarea name="body" placeholder="New post..." oninput="counter.innerText = this.value.length" maxlength="140" rows="5" required></textarea>
+              <label><span id="newPostCounter">0</span>/140
+                <textarea name="body" placeholder="New post..." oninput="newPostCounter.innerText = this.value.length" maxlength="140" rows="5" required></textarea>
               </label>
               <div class="grid">
                 <button type="reset" onclick="newPost.close()">Cancel</button>

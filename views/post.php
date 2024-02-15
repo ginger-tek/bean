@@ -15,8 +15,8 @@ echo \Services\Utils::renderPost($post, ['type' => 'root view', 'noclick' => tru
     <section>
       <form method="POST" action="/posts">
         <input name="parent" value="<?= $post->id ?>" hidden>
-        <label><span id="counter">0</span>/140
-          <textarea name="body" placeholder="Reply..." oninput="counter.innerText = this.value.length" maxlength="140"
+        <label><span id="replyCounter">0</span>/140
+          <textarea name="body" placeholder="Reply..." oninput="replyCounter.innerText = this.value.length" maxlength="140"
             rows="5" required></textarea>
         </label>
         <div class="grid">
