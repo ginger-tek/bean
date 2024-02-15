@@ -8,7 +8,7 @@
             <?= $parent->authorDisplayName ?> (<a href="/@<?= $parent->authorUsername ?>">@<?= $parent->authorUsername ?></a>)
           </div>
           <div class="created" title="<?= date('Y-m-d g:i:s A', $parent->created) ?>">
-            <?= date('j M y', $parent->created) ?>
+            &bull; <?= date('j M y', $parent->created) ?>
           </div>
         </div>
         <div class="body">
@@ -22,7 +22,7 @@
         <?= $post->authorDisplayName ?> (<a href="/@<?= $post->authorUsername ?>">@<?= $post->authorUsername ?></a>)
       </div>
       <div class="created" title="<?= date('Y-m-d g:i:s A', $post->created) ?>">
-        <?= date('j M y', $post->created) ?>
+        &bull; <?= date('j M y', $post->created) ?>
       </div>
     </div>
     <div class="body">
