@@ -92,9 +92,9 @@ try {
       }
       if ($post->author != $_SESSION['user']->id)
         $app->sendRedirect('/unauthorized');
-      $res = $svc->delete($post->id);
+      $postsSvc->delete($post->id);
       $app->sendRedirect($_GET['next'] ?: '/');
-    })
+    });
   });
 
   $app->get('/@:username', function (Routy $app) {
