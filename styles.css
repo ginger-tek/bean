@@ -332,9 +332,10 @@ hr {
   height: auto;
   border-radius: 5px;
   overflow: hidden;
-  object-fit: cover;
+  object-fit: contain;
+  background: rgba(0,0,0,.5);
   border: 1px solid var(--primary);
-  aspect-ratio: 16/9;
+  max-height: 50dvh;
 }
 
 .bio {
