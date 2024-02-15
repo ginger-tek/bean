@@ -64,9 +64,7 @@
         <?= date('j M y', $reply->created) ?>
       </div>
     </div>
-    <div><i>Repling to <a href="/@<?= $reply->authorUsername ?>">@
-          <?= $reply->authorUsername ?>
-        </a></i></div>
+    <div><i>Repling to <a href="/@<?= $reply->authorUsername ?>">@<?= $reply->authorUsername ?></a></i></div>
     <div class="body">
       <?= \Services\Utils::parse($reply->body) ?>
     </div>
