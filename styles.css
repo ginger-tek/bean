@@ -128,26 +128,29 @@ a {
   color: inherit;
 }
 
-.post {
+.post-wrap {
   display: block;
-  margin: 1em 0;
-  padding: 1em 0;
+  margin: 1em auto;
+  padding: 1em;
   border-radius: 5px;
   position: relative;
+  border: 2px solid var(--primary);
 }
 
-.post:where(.root, .child, .parent) {
-  cursor: pointer;
+.post {  
+  position: relative;
+  padding: .25em;
 }
 
-.post:where(.root, .child):hover {
+.post-wrap:has(.post[onclick]):hover {
   background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
 }
 
 .post .header {
   font-size: 1em;
   display: flex;
-  gap: 1em;
+  gap: .5em;
 }
 
 .post :where(.header, .metrics) {
@@ -175,43 +178,24 @@ a {
   font-size: .8rem;
   font-style: italic;
   margin-left: 2em;
-}
-
-.post.parent,
-.post.child {
-  padding: 1em;
-}
-
-.post.child {
-  border-radius: 0;
-  border-left: 2px solid var(--primary);
+  margin-bottom: .5em;
+  padding-left: 1em;
 }
 
 .post.parent:before {
   display: inline-block;
   position: absolute;
   content: '';
-  top: .6em;
+  top: .7em;
   left: -1em;
   width: 1em;
-  height: calc(100% - 20px);
+  height: calc(100% - 15px);
   border-top: 2px solid var(--primary);
   border-left: 2px solid var(--primary);
 }
 
 .post.parent+.post {
   margin-top: 0;
-}
-
-.post.parent {
-  margin-bottom: 0;
-  margin-top: 0;
-  padding-top: 0;
-}
-
-.post:where(.root, .view) {
-  border: 2px solid var(--primary);
-  padding: 1em;
 }
 
 dialog {

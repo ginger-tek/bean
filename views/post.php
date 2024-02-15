@@ -1,32 +1,11 @@
-<div class="post view">
-  <?php if (@$parent) { ?>
-    <div class="post parent" onclick="location.href='/posts/<?= $parent->id ?>'">
-      <div class="header">
-        <div class="author">
-          <?= $parent->authorDisplayName ?> (<a href="/@<?= $parent->authorUsername ?>">@<?= $parent->authorUsername ?></a>)
-        </div>
-        <div class="created" title="<?= date('Y-m-d g:i:s A', $parent->created) ?>">
-          &bull; <?= date('j M y', $parent->created) ?>
-        </div>
-      </div>
-      <div class="body">
-        <?= $parent->body ?>
-      </div>
-      <div class="metrics"><?= $parent->commentsCount > 0 ? "<span>$parent->commentsCount Replies</span>" : '' ?></div>
-    </div>
-  <?php } ?>
-  <div class="header">
-    <div class="author">
-      <?= $post->authorDisplayName ?> (<a href="/@<?= $post->authorUsername ?>">@<?= $post->authorUsername ?></a>)
-    </div>
-    <div class="created" title="<?= date('Y-m-d g:i:s A', $post->created) ?>">
-      &bull; <?= date('j M y', $post->created) ?>
-    </div>
-  </div>
-  <div class="body">
-    <?= \Services\Utils::parse($post->body) ?>
-  </div>
-  <div class="metrics"><?= $post->commentsCount > 0 ? "<span>$post->commentsCount Replies</span>" : '' ?></div>
+<div class="post-wrap">
+<?php
+
+if ($post->parent)
+  echo \Services\Utils::renderPost($postsSvc->get($post->parent), ['type' => 'parent']);
+echo \Services\Utils::renderPost($post, ['type' => 'root view', 'noclick' => true]);
+
+?>
 </div>
 
 <?php if (isset($_SESSION['user'])) { ?>
@@ -52,22 +31,5 @@
   <button onclick="location.href='/login?next=<?= $_SERVER['REQUEST_URI'] ?>'">Reply</button>
 <?php } ?>
 
-<?php foreach ($replies as $reply) { ?>
-  <div class="post root" onclick="location.href='/posts/<?= $reply->id ?>'">
-    <div class="header">
-      <div class="author">
-        <?= $reply->authorDisplayName ?> (<a href="/@<?= $reply->authorUsername ?>">@
-          <?= $reply->authorUsername ?>
-        </a>)
-      </div>
-      <div class="created" title="<?= date('Y-m-d g:i:s A', $reply->created) ?>">
-        &bull; <?= date('j M y', $reply->created) ?>
-      </div>
-    </div>
-    <div><i>Repling to <a href="/@<?= $reply->authorUsername ?>">@<?= $reply->authorUsername ?></a></i></div>
-    <div class="body">
-      <?= \Services\Utils::parse($reply->body) ?>
-    </div>
-    <?= $reply->commentsCount > 0 ? "<div class=\"metrics\">$reply->commentsCount Replies</div>" : '' ?>
-  </div>
-<?php } ?>
+<?php foreach ($replies as $reply)
+  echo '<div class="post-wrap">' . \Services\Utils::renderPost($reply, ['type' => 'child']) . '</div>'; ?>

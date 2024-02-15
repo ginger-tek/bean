@@ -4,7 +4,7 @@ namespace Services;
 
 class Utils
 {
-  static function render(string $view, array $variables = [])
+  static function renderView(string $view, array $variables = [])
   {
     $variables['view'] = $view;
     extract($variables);
@@ -26,6 +26,34 @@ class Utils
       }
     }
     return "<pre>$body</pre>";
+  }
+
+  static function renderPost(object $post, array $options = []): string
+  {
+    $createdD = date('j M y', $post->created);
+    $createdDT = date('j M y g:i:s A', $post->created);
+    $type = $options['type'] ?? '';
+    $classes = join(' ', ['post', $type]);
+    $body = Utils::parse($post->body);
+    $commentsCount = $post->commentsCount > 0 ? "<span>$post->commentsCount Replies</span>" : '';
+    $onclick = $options['noclick'] ? '' : "onclick=\"location.href='/posts/{$post->id}'\"";
+    $html = <<<EOT
+    <div class="{$classes}" {$onclick}>
+      <div class="header">
+        <div class="author">
+          {$post->authorDisplayName} (<a href="/@{$post->authorUsername}">@{$post->authorUsername}</a>)
+        </div>
+        <div class="created" title="{$createdDT}">&bull; {$createdD}</div>
+      </div>
+      <div class="body">
+        {$body}
+      </div>
+      <div class="metrics">
+        {$commentsCount}
+      </div>
+    </div>
+    EOT;
+    return $html;
   }
 
   static function auth()

@@ -1,36 +1,13 @@
-<?php foreach ($posts as $post) { ?>
-  <div class="post root" onclick="location.href='/posts/<?= $post->id ?>'">
-    <?php if ($post->parent) {
-      $parent = $postsSvc->get($post->parent); ?>
-      <div class="post parent" href="/posts/<?= $parent->id ?>">
-        <div class="header">
-          <div class="author">
-            <?= $parent->authorDisplayName ?> (<a href="/@<?= $parent->authorUsername ?>">@<?= $parent->authorUsername ?></a>)
-          </div>
-          <div class="created" title="<?= date('Y-m-d g:i:s A', $parent->created) ?>">
-            &bull; <?= date('j M y', $parent->created) ?>
-          </div>
-        </div>
-        <div class="body">
-          <?= $parent->body ?>
-        </div>
-        <div class="metrics"><?= $parent->commentsCount > 0 ? "<span>$parent->commentsCount Replies</span>" : '' ?></div>
-      </div>
-    <?php } ?>
-    <div class="header">
-      <div class="author">
-        <?= $post->authorDisplayName ?> (<a href="/@<?= $post->authorUsername ?>">@<?= $post->authorUsername ?></a>)
-      </div>
-      <div class="created" title="<?= date('Y-m-d g:i:s A', $post->created) ?>">
-        &bull; <?= date('j M y', $post->created) ?>
-      </div>
-    </div>
-    <div class="body">
-      <?= \Services\Utils::parse($post->body) ?>
-    </div>
-    <div class="metrics"><?= $post->commentsCount > 0 ? "<span>$post->commentsCount Replies</span>" : '' ?></div>
-  </div>
-<?php }
+<?php
+
+foreach ($posts as $post) {
+  echo '<div class="post-wrap">';
+  if ($post->parent)
+    echo \Services\Utils::renderPost($postsSvc->get($post->parent), ['type' => 'parent', 'noclick' => true]);
+  echo \Services\Utils::renderPost($post, ['postsSvc' => $postsSvc]);
+  echo '</div>';
+}
+
 if (count($posts) == 0) { ?>
   <div style="text-align:center">
     <h2>Pretty quiet in here</h2>
@@ -42,6 +19,7 @@ if (count($posts) == 0) { ?>
     <?php } ?>
   </div>
 <?php } ?>
+
 <script>
   setInterval(() => {
     if (document.visibilityState == 'visible' && !newPost.hasAttribute('open') && !account.hasAttribute('open'))

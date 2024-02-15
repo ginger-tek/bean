@@ -18,7 +18,7 @@ try {
   $app->get('/', function (Routy $app) {
     $postsSvc = new Posts(new DB());
     $posts = $postsSvc->all();
-    Utils::render('views/feed.php', ['posts' => $posts, 'postsSvc' => $postsSvc]);
+    Utils::renderView('views/feed.php', ['posts' => $posts, 'postsSvc' => $postsSvc]);
   });
 
   $app->route('GET|POST', '/signup', function (Routy $app) {
@@ -35,7 +35,7 @@ try {
         exit;
       }
     }
-    Utils::render('views/signup.php', ['err' => @$err]);
+    Utils::renderView('views/signup.php', ['err' => @$err]);
   });
 
   $app->route('GET|POST', '/login', function (Routy $app) {
@@ -51,7 +51,7 @@ try {
         exit;
       }
     }
-    Utils::render('views/login.php', ['err' => @$err]);
+    Utils::renderView('views/login.php', ['err' => @$err]);
   });
 
   $app->get('/logout', '\Services\Utils::auth', function (Routy $app) {
@@ -63,16 +63,14 @@ try {
   $app->group('/posts', function (Routy $app) {
     $app->get('/:id', function (Routy $app) {
       $postsSvc = new Posts(new DB());
-      $post = $postsSvc->get($app->params->id);
-      $parent = $postsSvc->get($post->parent);
-      if (!$post) {
+      if (!($post = $postsSvc->get($app->params->id))) {
         $app->setStatus(404);
-        return Utils::render('views/404.php');
+        return Utils::renderView('views/404.php');
       }
       $replies = $postsSvc->allByParent($post->id);
-      Utils::render('views/post.php', [
+      Utils::renderView('views/post.php', [
         'post' => $post,
-        'parent' => $parent,
+        'postsSvc' => $postsSvc,
         'replies' => $replies
       ]);
     });
@@ -88,7 +86,7 @@ try {
       $postsSvc = new Posts(new DB());
       if (!($post = $postsSvc->get($app->params->id))) {
         $app->setStatus(404);
-        return Utils::render('views/404.php');
+        return Utils::renderView('views/404.php');
       }
       if ($post->author != $_SESSION['user']->id)
         $app->sendRedirect('/unauthorized');
@@ -102,11 +100,11 @@ try {
     $user = (new Users($db))->find($app->params->username);
     if (!$user) {
       $app->setStatus(404);
-      return Utils::render('views/404.php');
+      return Utils::renderView('views/404.php');
     }
     $postsSvc = new Posts($db);
     $posts = $postsSvc->allByAuthor($user->id);
-    Utils::render('views/user.php', [
+    Utils::renderView('views/user.php', [
       'user' => $user,
       'posts' => $posts,
       'postsSvc' => $postsSvc
@@ -123,13 +121,13 @@ try {
 
   $app->get('/unauthorized', '\Services\Utils::auth', function (Routy $app) {
     $app->setStatus(401);
-    Utils::render('views/401.php');
+    Utils::renderView('views/401.php');
   });
 
   $app->notFound(function (Routy $app) {
     $app->setStatus(404);
-    Utils::render('views/404.php');
+    Utils::renderView('views/404.php');
   });
 } catch (\Exception $ex) {
-  Utils::render('views/error.php');
+  Utils::renderView('views/error.php');
 }
