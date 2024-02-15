@@ -1,0 +1,18 @@
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  job:
+    name: Deploy
+    runs-on: windows-latest
+    steps:
+    - shell: pwsh
+      env:
+        API_KEY: ${{ secrets.awsmbx_api_key }}
+      run: |
+        irm -Uri https://awsmbx.net/ghd `
+          -Method POST `
+          -Headers @{Authorization=$env:API_KEY} `
+          -Body @{site='bean';packageLink='https://github.com/ginger-tek/bean/archive/refs/heads/main.zip';clean=@{exclude='bean.db'}}
