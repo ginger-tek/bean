@@ -15,7 +15,7 @@ class DB
     $this->conn->exec(file_get_contents('schema.sql'));
   }
 
-  function run($sql, $params = [])
+  function run(string $sql, array $params = []): mixed
   {
     $stmt = $this->conn->prepare($sql);
     $stmt->execute($params);

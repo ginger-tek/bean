@@ -79,10 +79,22 @@ try {
 
     $app->post('/', '\Services\Utils::auth', function (Routy $app) {
       $body = $app->getBody();
-      $svc = new Posts(new DB());
-      $post = $svc->create(substr(htmlspecialchars($body->body), 0, 140), @$body->parent);
+      $postsSvc = new Posts(new DB());
+      $post = $postsSvc->create(substr(htmlspecialchars($body->body), 0, 140), @$body->parent);
       $app->sendRedirect("/posts/$post->id");
     });
+
+    $app->delete('/:id', '\Services\Utils::auth', function (Routy $app) {
+      $postsSvc = new Posts(new DB());
+      if (!($post = $postsSvc->get($app->params->id))) {
+        $app->setStatus(404);
+        return Utils::render('views/404.php');
+      }
+      if ($post->author != $_SESSION['user']->id)
+        $app->sendRedirect('/unauthorized');
+      $res = $svc->delete($post->id);
+      $app->sendRedirect($_GET['next'] ?: '/');
+    })
   });
 
   $app->get('/@:username', function (Routy $app) {
@@ -107,6 +119,11 @@ try {
     $_SESSION['user']->displayName = substr($_POST['displayName'], 0, 25);
     $_SESSION['user']->bio = substr($_POST['bio'], 0, 140);
     $app->sendRedirect($_GET['next'] ?: '/');
+  });
+
+  $app->get('/unauthorized', '\Services\Utils::auth', function (Routy $app) {
+    $app->setStatus(401);
+    Utils::render('views/401.php');
   });
 
   $app->notFound(function (Routy $app) {

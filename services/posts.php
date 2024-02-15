@@ -11,7 +11,7 @@ class Posts
     $this->db = $db;
   }
 
-  function create($body, $parent = null)
+  function create(string $body, string $parent = null): object|bool
   {
     $id = uniqid();
     $this->db->run("insert into posts (id, body, parent, author, created) values (?, ?, ?, ?, ?)", [
@@ -24,23 +24,28 @@ class Posts
     return $this->get($id);
   }
 
-  function get($id)
+  function get(string $id): object|bool
   {
     return $this->db->run("select * from v_posts where id = ?", [$id])->fetch();
   }
 
-  function all()
+  function all(): array
   {
     return $this->db->run("select * from v_posts order by created desc")->fetchAll();
   }
 
-  function allByParent($id)
+  function allByParent(string $id): array
   {
     return $this->db->run("select * from v_posts where parent = ? order by created desc", [$id])->fetchAll();
   }
 
-  function allByAuthor($userId)
+  function allByAuthor(string $userId): array
   {
     return $this->db->run("select * from v_posts where author = ? order by created desc", [$userId])->fetchAll();
+  }
+
+  function delete(string $id): bool
+  {
+    return (bool)$this->db->run("delete from posts where id = ? limit 1", [$id])->rowCount();
   }
 }

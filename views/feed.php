@@ -14,7 +14,7 @@
         <div class="body">
           <?= $parent->body ?>
         </div>
-        <?= $parent->commentsCount > 0 ? "<div class=\"metrics\">$parent->commentsCount Replies</div>" : '' ?>
+        <div class="metrics"><?= $parent->commentsCount > 0 ? "<span>$parent->commentsCount Replies</span>" : '' ?></div>
       </div>
     <?php } ?>
     <div class="header">
@@ -28,7 +28,7 @@
     <div class="body">
       <?= \Services\Utils::parse($post->body) ?>
     </div>
-    <?= $post->commentsCount > 0 ? "<div class=\"metrics\">$post->commentsCount Replies</div>" : '' ?>
+    <div class="metrics"><?= $post->commentsCount > 0 ? "<span>$post->commentsCount Replies</span>" : '' ?></div>
   </div>
 <?php }
 if (count($posts) == 0) { ?>
