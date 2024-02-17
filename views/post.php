@@ -31,7 +31,7 @@
   <?php } else { ?>
     <button onclick="location.href='/login?next=<?= $_SERVER['REQUEST_URI'] ?>'">Reply</button>
   <?php } ?>
-  <button onclick="navigator.share({title:'<?= $post->authorUsername ?> on Bean',text:'<?= $post->body ?>',url:location.href})">Share</button>
+  <button onclick="navigator.share({title:'@<?= $post->authorUsername ?> on Bean',text:'<?= $post->body ?>',url:location.href})">Share</button>
 </div>
 <hr>
 <h3>Replies</h3>
