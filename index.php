@@ -4,7 +4,7 @@ session_start(['read_and_close' => true]);
 
 require 'vendor/autoload.php';
 
-spl_autoload_register(fn ($c) => include "$c.php");
+spl_autoload_register(fn($c) => include "$c.php");
 
 use GingerTek\Routy\Routy;
 use Services\DB;
@@ -80,18 +80,6 @@ try {
       $postsSvc = new Posts(new DB());
       $post = $postsSvc->create(substr(htmlspecialchars($body->body), 0, 140), @$body->parent);
       $app->sendRedirect("/posts/$post->id");
-    });
-
-    $app->delete('/:id', '\Services\Utils::auth', function (Routy $app) {
-      $postsSvc = new Posts(new DB());
-      if (!($post = $postsSvc->get($app->params->id))) {
-        $app->setStatus(404);
-        return Utils::renderView('views/404.php');
-      }
-      if ($post->author != $_SESSION['user']->id)
-        $app->sendRedirect('/unauthorized');
-      $postsSvc->delete($post->id);
-      $app->sendRedirect($_GET['next'] ?: '/');
     });
   });
 

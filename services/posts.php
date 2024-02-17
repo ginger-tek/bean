@@ -43,9 +43,4 @@ class Posts
   {
     return $this->db->run("select * from v_posts where author = ? order by created desc", [$userId])->fetchAll();
   }
-
-  function delete(string $id): bool
-  {
-    return (bool)$this->db->run("delete from posts where id = ? limit 1", [$id])->rowCount();
-  }
 }

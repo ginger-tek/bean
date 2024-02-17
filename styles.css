@@ -81,15 +81,17 @@ form {
   color: inherit;
 }
 
-:where(input, select, textarea, button) {
-  padding: 5px;
+:where(input, select, textarea, button, [role=button]) {
+  padding: .5em;
   font-size: 1em;
   border-radius: 5px;
   border: 1px solid var(--primary);
 }
 
-:where(input, select, textarea, button):focus {
+:where(input, select, textarea, button, [role=button]):focus,
+:where(input, select, textarea, button, [role=button]):hover {
   outline: 1px solid var(--secondary);
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.75);
 }
 
 label:has(input, select, textarea),
@@ -114,7 +116,6 @@ label:has(input, select, textarea) {
   cursor: pointer;
   color: var(--bg) !important;
   font-weight: bold;
-  padding: 5px;
   text-align: center;
 }
 
@@ -135,6 +136,7 @@ a {
   border-radius: 5px;
   position: relative;
   border: 2px solid var(--primary);
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.75);
 }
 
 .post {  

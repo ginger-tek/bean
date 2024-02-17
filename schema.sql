@@ -1,17 +1,17 @@
-create table if not exists posts(
-  id text primary key not null,
-  parent text,
-  author text,
-  body text not null,
-  created integer not null
-);
-
 create table if not exists users(
   id text primary key not null,
   displayName text,
   bio text,
   username text not null unique,
   password blob not null,
+  created integer not null
+);
+
+create table if not exists posts(
+  id text primary key not null,
+  parent text,
+  author text,
+  body text not null,
   created integer not null
 );
 
