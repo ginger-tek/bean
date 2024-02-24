@@ -57,14 +57,14 @@ try {
   $app->get('/logout', '\Services\Utils::auth', function (Routy $app) {
     session_start();
     session_destroy();
-    $app->sendRedirect('/');
+    $app->redirect('/');
   });
 
   $app->group('/posts', function (Routy $app) {
     $app->get('/:id', function (Routy $app) {
       $postsSvc = new Posts(new DB());
       if (!($post = $postsSvc->get($app->params->id))) {
-        $app->setStatus(404);
+        $app->status(404);
         return Utils::renderView('views/404.php');
       }
       $replies = $postsSvc->allByParent($post->id);
@@ -79,7 +79,7 @@ try {
       $body = $app->getBody();
       $postsSvc = new Posts(new DB());
       $post = $postsSvc->create(substr(htmlspecialchars($body->body), 0, 140), @$body->parent);
-      $app->sendRedirect("/posts/$post->id");
+      $app->redirect("/posts/$post->id");
     });
   });
 
@@ -87,7 +87,7 @@ try {
     $db = new DB();
     $user = (new Users($db))->find($app->params->username);
     if (!$user) {
-      $app->setStatus(404);
+      $app->status(404);
       return Utils::renderView('views/404.php');
     }
     $postsSvc = new Posts($db);
@@ -104,16 +104,16 @@ try {
     session_start();
     $_SESSION['user']->displayName = substr($_POST['displayName'], 0, 25);
     $_SESSION['user']->bio = substr($_POST['bio'], 0, 140);
-    $app->sendRedirect($_GET['next'] ?: '/');
+    $app->redirect($_GET['next'] ?: '/');
   });
 
   $app->get('/unauthorized', '\Services\Utils::auth', function (Routy $app) {
-    $app->setStatus(401);
+    $app->status(401);
     Utils::renderView('views/401.php');
   });
 
   $app->notFound(function (Routy $app) {
-    $app->setStatus(404);
+    $app->status(404);
     Utils::renderView('views/404.php');
   });
 } catch (\Exception $ex) {

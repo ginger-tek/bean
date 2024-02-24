@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ginger-tek/routy",
-            "version": "3.2.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ginger-tek/routy.git",
-                "reference": "dea50865733dde8897aa74d9c3ac318378eab764"
+                "reference": "43d56356b27ebf0c0eb0d87157cb5207923400d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ginger-tek/routy/zipball/dea50865733dde8897aa74d9c3ac318378eab764",
-                "reference": "dea50865733dde8897aa74d9c3ac318378eab764",
+                "url": "https://api.github.com/repos/ginger-tek/routy/zipball/43d56356b27ebf0c0eb0d87157cb5207923400d9",
+                "reference": "43d56356b27ebf0c0eb0d87157cb5207923400d9",
                 "shasum": ""
             },
             "require": {
@@ -50,9 +50,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ginger-tek/routy/issues",
-                "source": "https://github.com/ginger-tek/routy/tree/3.2.0"
+                "source": "https://github.com/ginger-tek/routy/tree/3.3.1"
             },
-            "time": "2024-01-01T01:42:05+00:00"
+            "time": "2024-02-24T04:17:03+00:00"
         }
     ],
     "packages-dev": [],
