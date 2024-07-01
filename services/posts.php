@@ -6,7 +6,7 @@ class Posts
 {
   private DB $db;
 
-  public function __construct(DB $db)
+  public function __construct(DB $db = new DB)
   {
     $this->db = $db;
   }

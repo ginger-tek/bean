@@ -4,14 +4,6 @@ namespace Services;
 
 class Utils
 {
-  static function renderView(string $view, array $variables = [])
-  {
-    $variables['view'] = $view;
-    extract($variables);
-    include_once 'layout.php';
-    exit;
-  }
-
   static function parse(string $body): string
   {
     if (preg_match_all('#((https://){0,1}[-a-zA-Z0-9@:%._\+~\#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~\#?&//=]*))#m', $body, $links, PREG_PATTERN_ORDER)) {

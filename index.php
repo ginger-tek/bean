@@ -1,9 +1,10 @@
 <?php
 
+if (preg_match('#\.(?:css|js|png|jpeg|jpg|gif|webp)$#', $_REQUEST['REQUEST_URI'])) return false;
+
 session_start(['read_and_close' => true]);
 
 require 'vendor/autoload.php';
-
 spl_autoload_register(fn($c) => include "$c.php");
 
 use GingerTek\Routy\Routy;
@@ -15,10 +16,16 @@ use Services\Utils;
 $app = new Routy();
 
 try {
-  $app->get('/', function (Routy $app) {
-    $postsSvc = new Posts(new DB());
-    $posts = $postsSvc->all();
-    Utils::renderView('views/feed.php', ['posts' => $posts, 'postsSvc' => $postsSvc]);
+  $app->route('GET|POST', '/signup', AuthController::signup(...));
+  $app->route('GET|POST', '/login' AuthController::login(...));
+
+  $app->group('/', Middleware::auth(...), function (Routy $app) {
+    $app->get('/feed', PostsController::list(...));
+    $app->get('/account', AccountController::me(...));
+    $app->post('/posts', PostsController::creat(...));
+    $app->get('/@:username', )
+
+    $app->get('/logout', AuthController::logout(...));
   });
 
   $app->route('GET|POST', '/signup', function (Routy $app) {
