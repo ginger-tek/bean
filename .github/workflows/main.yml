@@ -14,4 +14,8 @@ jobs:
       env:
         API_KEY: ${{ secrets.AWSMBX_API_KEY }}
       run: |
-        irm -Uri https://awsmbx.net/ghd -Method POST -Headers @{Authorization=$env:API_KEY} -Body (@{site='bean';packageLink='https://github.com/ginger-tek/bean/archive/refs/heads/main.zip';clean=@{exclude='bean.db'}} | convertto-json) -ContentType application/json | select -ExpandProperty log
+        irm -Uri https://deploy.awsmbx.net -Method POST -Headers @{Authorization=$env:API_KEY} -Body (@{
+          site='bean'
+          packageLink='https://github.com/ginger-tek/bean/archive/refs/tags/${{ github.ref_name }}.zip'
+          clean=@{exclude='bean.db'}
+        } | ConvertTo-Json) -ContentType application/json | select -ExpandProperty log
