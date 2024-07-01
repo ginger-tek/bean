@@ -4,6 +4,10 @@ on:
     - .github/**
     branches:
     - main
+  release:
+    types: [created]
+    branches:
+    - main
 
 jobs:
   job:
