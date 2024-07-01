@@ -1,10 +1,5 @@
 on:
   workflow_dispatch:
-  push:
-    paths-ignore:
-    - .github/**
-    branches:
-    - main
   release:
     types: [created]
     branches:
