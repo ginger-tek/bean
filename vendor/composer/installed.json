@@ -2,23 +2,23 @@
     "packages": [
         {
             "name": "ginger-tek/routy",
-            "version": "3.3.1",
-            "version_normalized": "3.3.1.0",
+            "version": "3.5.4",
+            "version_normalized": "3.5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ginger-tek/routy.git",
-                "reference": "43d56356b27ebf0c0eb0d87157cb5207923400d9"
+                "reference": "488d9b9b9b6c41fb7ba83d33e974c27949a948cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ginger-tek/routy/zipball/43d56356b27ebf0c0eb0d87157cb5207923400d9",
-                "reference": "43d56356b27ebf0c0eb0d87157cb5207923400d9",
+                "url": "https://api.github.com/repos/ginger-tek/routy/zipball/488d9b9b9b6c41fb7ba83d33e974c27949a948cb",
+                "reference": "488d9b9b9b6c41fb7ba83d33e974c27949a948cb",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1.0"
             },
-            "time": "2024-02-24T04:17:03+00:00",
+            "time": "2024-06-20T17:32:07+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -47,7 +47,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ginger-tek/routy/issues",
-                "source": "https://github.com/ginger-tek/routy/tree/3.3.1"
+                "source": "https://github.com/ginger-tek/routy/tree/3.5.4"
             },
             "install-path": "../ginger-tek/routy"
         }

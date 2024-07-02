@@ -1,7 +1,7 @@
 <div style="max-inline-size:250px;margin-inline:auto">
   <h2>Login</h2>
   <form method="POST">
-    <p style="color:orangered"><?= @$err ?></p>
+    <p style="color:orangered"><?= @$model['error'] ?></p>
     <label>Username
       <input name="username" type="text" maxlength="15" autocapitalize="off" required>
     </label>

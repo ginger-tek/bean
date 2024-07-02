@@ -6,18 +6,18 @@ class Posts
 {
   private DB $db;
 
-  public function __construct(DB $db)
+  public function __construct(DB $db = new DB)
   {
     $this->db = $db;
   }
 
-  function create(string $body, string $parent = null): object|bool
+  function create(object $data): object|bool
   {
     $id = uniqid();
     $this->db->run("insert into posts (id, body, parent, author, created) values (?, ?, ?, ?, ?)", [
       $id,
-      $body,
-      $parent,
+      $data->body,
+      $data->parent ?? null,
       $_SESSION['user']->id,
       time()
     ]);
@@ -29,17 +29,17 @@ class Posts
     return $this->db->run("select * from v_posts where id = ?", [$id])->fetch();
   }
 
-  function all(): array
+  function list(): array
   {
     return $this->db->run("select * from v_posts order by created desc")->fetchAll();
   }
 
-  function allByParent(string $id): array
+  function listByParent(string $id): array
   {
     return $this->db->run("select * from v_posts where parent = ? order by created desc", [$id])->fetchAll();
   }
 
-  function allByAuthor(string $userId): array
+  function listByAuthor(string $userId): array
   {
     return $this->db->run("select * from v_posts where author = ? order by created desc", [$userId])->fetchAll();
   }
