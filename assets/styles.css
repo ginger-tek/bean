@@ -22,6 +22,11 @@ body {
   background: var(--bg);
 }
 
+body {
+  opacity: 0;
+  transition: opacity .2s;
+}
+
 h1,
 h2,
 h3,
@@ -88,8 +93,8 @@ form {
   border: 1px solid var(--primary);
 }
 
-:where(input, select, textarea, button, [role=button]):focus,
-:where(input, select, textarea, button, [role=button]):hover {
+:where(input, select, textarea, button, [role=button]):not([disabled], [readonly]):focus,
+:where(input, select, textarea, button, [role=button]):not([disabled], [readonly]):hover {
   outline: 1px solid var(--secondary);
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.75);
 }
@@ -104,7 +109,7 @@ label:has(input, select, textarea) {
   margin-bottom: 1em;
 }
 
-:where(button, [role=button]) {
+:where(button, [role=button]):not([disabled]) {
   display: block;
   width: 100%;
   font-family: inherit;
@@ -125,8 +130,16 @@ label:has(input, select, textarea) {
   min-width: 100px;
 }
 
+:where(input, select, textarea, button, [role=button]):is([disabled], [readonly]) {
+  opacity: .75;
+}
+
 a {
   color: inherit;
+}
+
+.mb {
+  margin-bottom: 1em;
 }
 
 .post-wrap {
@@ -139,7 +152,7 @@ a {
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.75);
 }
 
-.post {  
+.post {
   position: relative;
   padding: .5em;
 }
@@ -210,46 +223,79 @@ dialog {
   opacity: 0;
   top: 2em;
   transition:
-    overlay var(--modal-duration) ease-out allow-discrete,
-    display var(--modal-duration) ease-out allow-discrete,
-    opacity var(--modal-duration) ease-out,
-    top var(--modal-duration) ease-out;
+    display var(--modal-duration) allow-discrete,
+    overlay var(--modal-duration) allow-discrete;
+  animation: hide var(--modal-duration) ease normal forwards;
+
+  &[open] {
+    animation: show var(--modal-duration) ease normal forwards;
+  }
 }
 
-dialog[open] {
-  opacity: 1;
-  top: 0;
+@keyframes show {
+  from {
+    opacity: 0;
+    top: 2em;
+  }
+
+  to {
+    opacity: 1;
+    top: 0;
+  }
 }
-/*
-@starting-style {
-  dialog[open] {
+
+@keyframes hide {
+  from {
+    opacity: 1;
+    top: 0;
+  }
+
+  to {
     opacity: 0;
     top: 2em;
   }
 }
-*/
+
 dialog::backdrop {
   background: rgba(0, 0, 0, 0);
   backdrop-filter: blur(0);
   transition:
     display var(--modal-duration) allow-discrete,
-    overlay var(--modal-duration) allow-discrete,
-    background var(--modal-duration),
-    backdrop-filter var(--modal-duration);
+    overlay var(--modal-duration) allow-discrete;
+  animation: hide-bd var(--modal-duration) ease normal forwards;
 }
 
 dialog[open]::backdrop {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+  transition:
+    display var(--modal-duration) allow-discrete,
+    overlay var(--modal-duration) allow-discrete;
+  animation: show-bd var(--modal-duration) ease normal forwards;
 }
-/*
-@starting-style {
-  dialog[open]::backdrop {
+
+@keyframes show-bd {
+  from {
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0);
+  }
+
+  to {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+}
+
+@keyframes hide-bd {
+  from {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+
+  to {
     background: rgba(0, 0, 0, 0);
     backdrop-filter: blur(0);
   }
 }
-*/
+
 dialog>header {
   font-size: 1.25em;
   font-weight: bold;
@@ -263,6 +309,7 @@ dialog section {
 .grid {
   display: flex;
   gap: .5em;
+  margin-bottom: 1em;
 }
 
 .grid>* {
@@ -319,7 +366,7 @@ hr {
   border-radius: 5px;
   overflow: hidden;
   object-fit: contain;
-  background: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, .5);
   border: 1px solid var(--primary);
   max-height: 50dvh;
 }

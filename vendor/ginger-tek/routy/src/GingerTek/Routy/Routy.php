@@ -29,6 +29,11 @@ class Routy
   public ?object $params;
 
   /**
+   * @var object Available URL query parameters from the URL.
+   */
+  public ?object $query;
+
+  /**
    * @var array Internal array of URI parts for handling grouped/nested matching.
    */
   private array $path;
@@ -50,6 +55,7 @@ class Routy
     $this->uri = rtrim(parse_url($_SERVER['REQUEST_URI'])['path'], '/') ?: '/';
     $this->method = $_SERVER['REQUEST_METHOD'];
     $this->path = isset($config['base']) ? [$config['base']] : [];
+    $this->query = (object) $_GET;
     $this->params = null;
     $this->layout = $config['layout'] ?? null;
   }
@@ -66,7 +72,7 @@ class Routy
     if (!str_contains($method, $this->method))
       return;
     $path = rtrim(join('', $this->path) . $route, '/') ?: '/';
-    if ($path == $this->uri || $path == '*' || preg_match('#^' . preg_replace('#:(\w+)#', '(?<$1>[\w\-]+)', $path) . '$#', $this->uri, $params)) {
+    if ($path === $this->uri || $path === '*' || preg_match('#^' . preg_replace('#:(\w+)#', '(?<$1>[\w\-\+\%]+)', $path) . '$#', $this->uri, $params)) {
       foreach ($handlers as $handler) {
         if (isset($params))
           $this->params = (object) $params;
@@ -84,8 +90,9 @@ class Routy
    */
   public function group(string $base, callable ...$handlers): void
   {
-    $this->path[] = $base;
-    if (str_starts_with($this->uri, $base)) {
+    if ($base != '/')
+      $this->path[] = '/' . trim($base, '/');
+    if (str_starts_with($this->uri, join($this->path))) {
       foreach ($handlers as $handler)
         $handler($this);
     }
@@ -186,11 +193,32 @@ class Routy
   {
     $body = file_get_contents('php://input');
     $headers = $this->getHeaders();
+    if (substr($headers['content-type'], 0, 19) === 'multipart/form-data')
+      return (object) $_POST;
     return match ($headers['content-type']) {
       'application/json' => json_decode($body),
       'application/x-www-form-urlencoded' => (object) $_POST,
       default => $body
     };
+  }
+
+  /**
+   * Returns uploaded file(s) by field name as an object if single-file upload and object array if multi-file upload.
+   * 
+   * @return mixed
+   */
+  public function getFiles(string $name): object|array
+  {
+    $files = [];
+    $vector = @$_FILES[$name] ?? [];
+    if (!is_array($vector['name']))
+      return (object) $vector;
+    foreach ($vector as $key1 => $value1) {
+      foreach ($value1 as $key2 => $value2) {
+        $files[$key2][$key1] = $value2;
+      }
+    }
+    return $files;
   }
 
   /**
@@ -243,23 +271,26 @@ class Routy
   }
 
   /**
-   * Renders layout file using standard PHP templating via includes.
-   * All other variables in argument array are extracted to and made available within the rendering scope.
-   * - layout = overrides the default layout file
-   * - view   = path to view file
+   * Renders a view using standard PHP templating via includes.
+   * Options:
+   * - layout = Optional; Overrides default layout. If set to false, will render without layout
+   * - model  = Optional; Array of variables to expose to the template context
    * 
-   * @param array $options
+   * @param string $view
+   * @param array  $options
    * @return void
    */
-  public function render(array $options): void
+  public function render(string $view, array $options = []): void
   {
-    $options['layout'] ??= $this->layout;
-    if (!@$options['layout'])
-      throw new \Exception('Missing layout argument');
-    if (!@$options['view'])
-      throw new \Exception('Missing view argument');
-    extract($options, EXTR_OVERWRITE);
-    include $options['layout'];
+    $options['layout'] ??= $this->layout ?? null;
+    if (@$options['layout']) {
+      $options['view'] = $view;
+      extract($options, EXTR_OVERWRITE);
+      include $options['layout'];
+    } else {
+      extract($options, EXTR_OVERWRITE);
+      include $view;
+    }
     exit;
   }
 
@@ -300,5 +331,115 @@ class Routy
     $this->status(404);
     $handler($this);
     exit;
+  }
+
+  /**
+   * Serve static files at the base URI from a specified directory.
+   * NOTE: This may not be as performant as serving files from your web server directly.
+   * NOTE: Use at your discretion with consideration for the speed of your application.
+   * NOTE: MIME types referenced from https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types.
+   * 
+   * @return void
+   */
+  public function serveStatic(string $path, bool $fallback = true): void
+  {
+    $path .= $this->uri;
+    if (file_exists($path)) {
+      if (is_dir($path))
+        $path .= 'index.html';
+      $mime = match (pathinfo($path, PATHINFO_EXTENSION)) {
+        'aw' => 'application/applixware',
+        'ecma' => 'application/ecmascript',
+        'exi' => 'application/exi',
+        'gxf' => 'application/gxf',
+        'stk' => 'application/hyperstudio',
+        'ipfix' => 'application/ipfix',
+        'json' => 'application/json',
+        'mrc' => 'application/marc',
+        'ma', 'nb', 'mb' => 'application/mathematica',
+        'mbox' => 'application/mbox',
+        'm21' => 'application/mp21',
+        'mp21' => 'application/mp21',
+        'mp4s' => 'application/mp4',
+        'doc', 'dot' => 'application/msword',
+        'mxf' => 'application/mxf',
+        'oda' => 'application/oda',
+        'ogx' => 'application/ogg',
+        'onetoc', 'onetoc2', 'onetmp', 'onepkg' => 'application/onenote',
+        'oxps' => 'application/oxps',
+        'pdf' => 'application/pdf',
+        'p10' => 'application/pkcs10',
+        'p8' => 'application/pkcs8',
+        'pki' => 'application/pkixcmp',
+        'ai', 'eps', 'ps' => 'application/postscript',
+        'rtf' => 'application/rtf',
+        'sdp' => 'application/sdp',
+        'gram' => 'application/srgs',
+        'wasm' => 'application/wasm',
+        'wgt' => 'application/widget',
+        'hlp' => 'application/winhlp',
+        'xml', 'xsl' => 'application/xml',
+        'yang' => 'application/yang',
+        'zip' => 'application/zip',
+        'adp' => 'audio/adpcm',
+        'au', 'snd' => 'audio/basic',
+        'mid', 'midi', 'kar', 'rmi' => 'audio/midi',
+        'm4a', 'mp4a' => 'audio/mp4',
+        'mpga', 'mp2', 'mp2a', 'mp3', 'm2a', 'm3a' => 'audio/mpeg',
+        'oga', 'ogg', 'spx', 'opus' => 'audio/ogg',
+        's3m' => 'audio/s3m',
+        'sil' => 'audio/silk',
+        'weba' => 'audio/webm',
+        'xm' => 'audio/xm',
+        'ttc' => 'font/collection',
+        'otf' => 'font/otf',
+        'ttf' => 'font/ttf',
+        'woff' => 'font/woff',
+        'woff2' => 'font/woff2',
+        'bmp' => 'image/bmp',
+        'cgm' => 'image/cgm',
+        'g3' => 'image/g3fax',
+        'gif' => 'image/gif',
+        'ief' => 'image/ief',
+        'jpeg', 'jpg', 'jpe' => 'image/jpeg',
+        'ktx' => 'image/ktx',
+        'png' => 'image/png',
+        'sgi' => 'image/sgi',
+        'tiff', 'tif' => 'image/tiff',
+        'webp' => 'image/webp',
+        'eml', 'mime' => 'message/rfc822',
+        'igs', 'iges' => 'model/iges',
+        'msh', 'mesh', 'silo' => 'model/mesh',
+        'wrl', 'vrml' => 'model/vrml',
+        'ics', 'ifb' => 'text/calendar',
+        'css' => 'text/css',
+        'csv' => 'text/csv',
+        'html' => 'text/html',
+        'htm' => 'text/html',
+        'js', 'mjs' => 'text/javascript',
+        'n3' => 'text/n3',
+        'txt', 'text', 'conf', 'def', 'list', 'log', 'in' => 'text/plain',
+        'rtx' => 'text/richtext',
+        'sgml', 'sgm' => 'text/sgml',
+        't', 'tr', 'roff', 'man', 'me', 'ms' => 'text/troff',
+        'ttl' => 'text/turtle',
+        'vcard' => 'text/vcard',
+        '3gp' => 'video/3gpp',
+        '3g2' => 'video/3gpp2',
+        'h261' => 'video/h261',
+        'h263' => 'video/h263',
+        'h264' => 'video/h264',
+        'jpgv' => 'video/jpeg',
+        'jpm', 'jpgm' => 'video/jpm',
+        'mj2', 'mjp2', 'ts', 'm2t', 'm2ts', 'mts' => 'video/mp2t',
+        'mp4', 'mp4v', 'mpg4', 'mpeg', 'mpg', 'mpe', 'm1v', 'm2v' => 'video/mpeg',
+        'ogv' => 'video/ogg',
+        'qt', 'mov' => 'video/quicktime',
+        'webm' => 'video/webm',
+      };
+      $this->sendData($path, $mime);
+    }
+    if ($fallback)
+      $this->end(404);
   }
 }

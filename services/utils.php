@@ -28,8 +28,8 @@ class Utils
     $classes = join(' ', ['post', $type]);
     $body = Utils::parse($post->body);
     $commentsCount = $post->commentsCount > 0 ? "<span>$post->commentsCount Replies</span>" : '';
-    $onclick = $options['noclick'] ? '' : "onclick=\"location.href='/posts/{$post->id}'\"";
-    $html = <<<EOT
+    $onclick = $options['noclick'] ?? "onclick=\"location.href='/posts/{$post->id}'\"";
+    $html = <<<HTML
     <div class="{$classes}" {$onclick}>
       <div class="header">
         <div class="author">
@@ -44,13 +44,7 @@ class Utils
         {$commentsCount}
       </div>
     </div>
-    EOT;
+    HTML;
     return $html;
-  }
-
-  static function auth()
-  {
-    if (!isset($_SESSION['user']))
-      header('location: /login');
   }
 }
