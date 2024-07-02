@@ -309,7 +309,6 @@ dialog section {
 .grid {
   display: flex;
   gap: .5em;
-  margin-bottom: 1em;
 }
 
 .grid>* {

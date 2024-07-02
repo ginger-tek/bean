@@ -1,6 +1,6 @@
 <?php if (isset($model['canEdit'])) { ?>
   <h2>Account</h2>
-  <div class="grid">
+  <div class="grid mb-1">
     <a role="button" href="/@<?= $model['user']->username ?>">View Profile</a>
     <a role="button" href="/logout">Logout</a>
   </div>
