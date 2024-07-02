@@ -30,7 +30,7 @@
             </form>
           </section>
         </dialog>
-        <a onclick="newPost.showModal()">New Post</a>
+        <span role="link" onclick="newPost.showModal()">New Post</span>
         <a href="/account">Account</a>
       <?php } else { ?>
         <div>
