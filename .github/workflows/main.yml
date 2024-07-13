@@ -21,6 +21,4 @@ jobs:
       run: |
         irm -Uri https://deploy.awsmbx.net -Method POST -Headers @{Authorization=$env:API_KEY} -Body (@{
           site='bean'
-          packageLink='https://github.com/ginger-tek/bean/archive/${{ github.ref }}.zip'
-          clean=@{exclude='bean.db'}
         } | ConvertTo-Json) -ContentType application/json | select -ExpandProperty log
